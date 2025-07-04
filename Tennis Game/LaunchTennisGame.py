@@ -60,9 +60,7 @@ class CustomRewardWrapper(Wrapper):
 
     def detect_ball_hit(self, current_observation, info):
         """
-        Conceptual function to detect if the agent's paddle has hit the ball.
-        This is a heuristic based on pixel analysis and requires careful tuning.
-        It's challenging to make robust without direct game state (RAM).
+        Conceptual function to detect if the agent's paddle has hit the ball
         """
         if self.prev_observation is None:
             self.prev_observation = current_observation
@@ -259,40 +257,6 @@ def main():
     os.makedirs(CHECKPOINT_DIR, exist_ok=True)  # Ensure directories exist
     os.makedirs(LOG_DIR, exist_ok=True)
 
-    # --- Setup Environment for Training (COMMENTED OUT) ---
-    # env = setup_tennis_environment(render_mode=None, log_dir=LOG_DIR)
-    # print("Training environment setup complete.")
-
-    # callback = TrainAndLoggingCallback(check_freq=10000, save_path=CHECKPOINT_DIR)
-    # model = PPO(
-    #     'CnnPolicy',
-    #     env,
-    #     verbose=1,
-    #     tensorboard_log=LOG_DIR,
-    #     learning_rate=0.000001,
-    #     n_steps=512,
-    #     device='cuda'
-    # )
-    # print("PPO model instantiated.")
-
-    # # Train the RL model
-    # TRAINING_TIMESTEPS = 500000
-    # print(f"Starting model training for {TRAINING_TIMESTEPS} timesteps...")
-    # model.learn(total_timesteps=TRAINING_TIMESTEPS, callback=callback)
-    # print("Model training finished.")
-
-    # # Save the final trained model
-    # model.save('tennis_ppo_trained_model')
-    # print(f"Final model saved to: tennis_ppo_trained_model.zip")
-
-    # # Close the training environment
-    # env.close()
-    # print("Training environment closed.")
-
-    # # Plotting training results
-    # print("\n--- Plotting training results ---")
-    # plot_results(LOG_DIR)
-
     # --- Load and Play with the Trained Model ---
     print("\n--- Starting game with loaded model ---")
 
@@ -300,17 +264,13 @@ def main():
 
     # Load the trained model
     try:
-        # CORRECTED: Use os.path.join for robust path construction
-        # This will correctly handle paths on Windows, Linux, or macOS.
-        # If loading the final saved model:
-        # MODEL_TO_LOAD_PATH = 'tennis_ppo_trained_model'
 
         # If loading a specific checkpoint (e.g., best_model_290000):
-        MODEL_TO_LOAD_PATH = os.path.join(CHECKPOINT_DIR, 'best_model_290000')  # Example path
+        MODEL_TO_LOAD_PATH = os.path.join(CHECKPOINT_DIR, 'best_model_290000') 
         loaded_model = PPO.load(MODEL_TO_LOAD_PATH, device='cuda')
-        print(f"Model '{MODEL_TO_LOAD_PATH}.zip' loaded successfully.")
+        print(f"Modelloaded successfully")
     except FileNotFoundError:
-        print("Model not found. Please ensure the model file exists in the specified path.")
+        print("Model not found")
         print(f"Attempted to load: {MODEL_TO_LOAD_PATH}.zip")
         play_env.close()
         return
